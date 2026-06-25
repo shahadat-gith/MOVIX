@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiSearch, FiX, FiType } from "react-icons/fi";
 import { HiOutlineSparkles } from "react-icons/hi";
 import useRecommendations from "../hooks/useRecommendations";
-import useDebounce from "../hooks/useDebounce";
 import { searchMoviesByTitle } from "../api/movie";
 import MovieCard from "../components/movies/MovieCard";
 import SectionSkeleton from "../components/common/SectionSkeleton";
@@ -13,24 +12,26 @@ const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const initialType = searchParams.get("type") || "ai";
+  
   const [query, setQuery] = useState(initialQuery);
+  const [activeSearchQuery, setActiveSearchQuery] = useState(initialQuery);
   const [searchType, setSearchType] = useState(initialType);
-  const debouncedQuery = useDebounce(query, 600);
 
-  // AI search results
+  // AI search results (Triggers only when activeSearchQuery updates)
   const {
     movies: aiMovies,
     loading: aiLoading,
     error: aiError,
-  } = useRecommendations(searchType === "ai" ? debouncedQuery : "");
+  } = useRecommendations(searchType === "ai" ? activeSearchQuery : "");
 
   // Name search results
   const [nameMovies, setNameMovies] = useState([]);
   const [nameLoading, setNameLoading] = useState(false);
   const [nameError, setNameError] = useState(null);
 
+  // Handle name-based searching manually or via mode switches
   useEffect(() => {
-    if (searchType !== "name" || !debouncedQuery || debouncedQuery.trim().length < 1) {
+    if (searchType !== "name" || !activeSearchQuery || activeSearchQuery.trim().length < 1) {
       setNameMovies([]);
       setNameLoading(false);
       setNameError(null);
@@ -41,7 +42,7 @@ const Search = () => {
     setNameLoading(true);
     setNameError(null);
 
-    searchMoviesByTitle(debouncedQuery)
+    searchMoviesByTitle(activeSearchQuery)
       .then((res) => {
         if (mounted) {
           const responseData = res.data || res;
@@ -62,28 +63,35 @@ const Search = () => {
     return () => {
       mounted = false;
     };
-  }, [debouncedQuery, searchType]);
+  }, [activeSearchQuery, searchType]);
 
   const movies = searchType === "ai" ? aiMovies : nameMovies;
   const loading = searchType === "ai" ? aiLoading : nameLoading;
   const error = searchType === "ai" ? aiError : nameError;
 
-  // Sync URL params
+  // Sync URL params only when a search is executed
   useEffect(() => {
     const params = {};
-    if (debouncedQuery.trim()) params.q = debouncedQuery.trim();
+    if (activeSearchQuery.trim()) params.q = activeSearchQuery.trim();
     params.type = searchType;
     setSearchParams(params, { replace: true });
-  }, [debouncedQuery, searchType, setSearchParams]);
+  }, [activeSearchQuery, searchType, setSearchParams]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setActiveSearchQuery(query);
+  };
 
   const handleClear = () => {
     setQuery("");
+    setActiveSearchQuery("");
     setSearchParams({}, { replace: true });
   };
 
   const handleModeSwitch = (type) => {
     setSearchType(type);
     setQuery("");
+    setActiveSearchQuery("");
     setNameMovies([]);
   };
 
@@ -150,41 +158,54 @@ const Search = () => {
               }
             `}
           >
- 
-           Search By Name
+            Search By Name
           </button>
         </div>
 
-        {/* Search Input */}
+        {/* Search Input Container */}
         <div className="max-w-2xl mx-auto mb-10">
-          <div className="relative">
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={
-                searchType === "ai"
-                  ? 'Try "mind bending sci fi" or "feel good romantic comedies"...'
-                  : "Search for a movie by its title..."
-              }
-              className="w-full bg-surface border border-border/50 rounded-2xl py-4 pl-12 pr-12 text-text placeholder-text-muted/40 text-base outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
-              autoFocus
-            />
-            {query && (
-              <button
-                onClick={handleClear}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text transition-colors"
-              >
-                <FiX className="w-5 h-5" />
-              </button>
-            )}
-          </div>
+          <form onSubmit={handleSearchSubmit} className="relative flex gap-2">
+            <div className="relative flex-1">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={
+                  searchType === "ai"
+                    ? 'Try "mind bending sci fi" or "feel good romantic comedies"...'
+                    : "Search for a movie by its title..."
+                }
+                className="w-full bg-surface border border-border/50 rounded-2xl py-4 pl-12 pr-12 text-text placeholder-text-muted/40 text-base outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
+                autoFocus
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text transition-colors"
+                >
+                  <FiX className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+            
+            <button
+              type="submit"
+              className={`px-6 py-4 rounded-2xl text-white font-medium transition-all duration-200 ${
+                searchType === "ai" 
+                  ? "bg-primary hover:bg-primary/95 shadow-glow-primary" 
+                  : "bg-secondary hover:bg-secondary/95 shadow-glow-secondary"
+              }`}
+            >
+              Search
+            </button>
+          </form>
         </div>
 
         {/* Results */}
         <AnimatePresence mode="wait">
-          {!debouncedQuery ? (
+          {!activeSearchQuery ? (
             <motion.div
               key="empty"
               initial={{ opacity: 0 }}
