@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOVIX - Software Requirements Specification (SRS)</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #090d16; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f43f5e; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-rose-600 selection:text-white">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 border-b border-slate-900 bg-slate-950/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <img src="https://res.cloudinary.com/dzwo6cuw4/image/upload/v1782373122/logo_xstim2.png" alt="MOVIX Logo" class="h-9 w-auto object-contain">
+                </div>
+                <span class="text-xs font-mono px-2 py-0.5 bg-slate-900 text-slate-400 rounded-sm border border-slate-800 hidden sm:inline-block">SRS v1.0</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-mono text-slate-400">
+                <span>Date: June 2026</span>
+                <span class="px-2 py-1 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 font-sans font-medium">IEEE 830 Standard</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="relative py-16 border-b border-slate-900 bg-linear-to-b from-slate-900 via-slate-950 to-slate-950">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(244,63,94,0.05),transparent_50%)]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <span class="text-xs font-bold tracking-widest uppercase text-rose-500 bg-rose-500/10 px-3 py-1 rounded-full border border-rose-500/20">Official Requirement Blueprint</span>
+            <h1 class="mt-4 text-4xl sm:text-5xl font-black tracking-tight text-white">Software Requirements Specification (SRS)</h1>
+            <p class="mt-2 text-lg text-slate-400">Project: <span class="text-white font-semibold">MOVIX</span> — AI-Powered Movie Discovery Platform</p>
+            <div class="mt-4 flex flex-wrap gap-6 text-xs text-slate-400 font-mono">
+                <div><i class="fa-solid fa-user text-rose-400 mr-1.5"></i> Author: Shahadat Ali</div>
+                <div><i class="fa-solid fa-layer-group text-rose-400 mr-1.5"></i> Target: Full Stack AI Application</div>
+                <div><i class="fa-solid fa-calendar text-rose-400 mr-1.5"></i> Version: 1.0 · June 2026</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col lg:flex-row gap-8">
+
+        <!-- SIDEBAR -->
+        <aside class="lg:w-64 shrink-0">
+            <div class="sticky top-28 space-y-1 bg-slate-900/20 p-4 rounded-xl border border-slate-900 max-h-[calc(100vh-9rem)] overflow-y-auto text-xs">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-3 mb-2 font-mono">Specification Index</p>
+                <a href="#sec-1"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-circle-info text-slate-600 w-4"></i> 1. Introduction</a>
+                <a href="#sec-2"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-cube text-slate-600 w-4"></i> 2. Overall Description</a>
+                <a href="#sec-3"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-star text-slate-600 w-4"></i> 3. System Features</a>
+                <a href="#sec-4"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-circle-nodes text-slate-600 w-4"></i> 4. External Interfaces</a>
+                <a href="#sec-5"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-sitemap text-slate-600 w-4"></i> 5. System Architecture</a>
+                <a href="#sec-6"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-list-check text-slate-600 w-4"></i> 6. Functional Requirements</a>
+                <a href="#sec-7"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-shield-halved text-slate-600 w-4"></i> 7. Non-Functional Specs</a>
+                <a href="#sec-8"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-database text-slate-600 w-4"></i> 8. Database Design</a>
+                <a href="#sec-9"  class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-folder-tree text-slate-600 w-4"></i> 9. Component Framework</a>
+                <a href="#sec-10" class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-brain text-slate-600 w-4"></i> 10. AI Vector Engine</a>
+                <a href="#sec-11" class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-code text-slate-600 w-4"></i> 11. API Specifications</a>
+                <a href="#sec-12" class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-lock text-slate-600 w-4"></i> 12. Security</a>
+                <a href="#sec-13" class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-cloud-arrow-up text-slate-600 w-4"></i> 13. Deployment</a>
+                <a href="#sec-14" class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-rocket text-slate-600 w-4"></i> 14. Future Enhancements</a>
+                <a href="#sec-15" class="flex items-center gap-2 px-3 py-2 rounded-md text-slate-400 hover:bg-slate-900 hover:text-white transition"><i class="fa-solid fa-triangle-exclamation text-slate-600 w-4"></i> 15. Constraints</a>
+            </div>
+        </aside>
+
+        <!-- CONTENT -->
+        <div class="flex-1 space-y-16 max-w-4xl min-w-0">
+
+            <!-- SEC 1: INTRODUCTION -->
+            <section id="sec-1" class="scroll-mt-24">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-6">
+                    <span class="p-2 bg-rose-500/10 text-rose-400 rounded-lg text-sm"><i class="fa-solid fa-circle-info"></i></span>
+                    <h2 class="text-2xl font-bold text-white">1. Introduction</h2>
+                </div>
+                <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+                    <p>
+                        <strong class="text-white">1.1 Purpose:</strong> This SRS defines the complete functional requirements, constraints, performance boundaries, and implementation framework for <span class="text-rose-400 font-semibold">MOVIX</span> — an AI-powered movie discovery platform that enables contextual, semantic intent-based searches across a movie catalog using deep-learning natural language embeddings.
+                    </p>
+                    <p>
+                        <strong class="text-white">1.2 Scope:</strong> MOVIX eliminates reliance on exact keyword matching. Users communicate abstract narrative intent — moods, themes, and subtexts — which the query pipeline maps into a vector similarity topology against the movie datastore.
+                    </p>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 font-mono italic">Movies about loneliness in space</span>
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 font-mono italic">Mind-bending movies like Interstellar</span>
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 font-mono italic">Feel-good movies for a rainy evening</span>
+                        <span class="text-xs px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400 font-mono italic">Psychological thrillers with twists</span>
+                    </div>
+                    <div class="mt-4 border border-slate-900 rounded-xl overflow-hidden">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-900 text-slate-300 font-mono">
+                                <tr><th class="p-3">Term</th><th class="p-3">Description</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-900 text-slate-400 bg-slate-950/40">
+                                <tr><td class="p-3 font-bold text-slate-200 font-mono">Embedding</td><td class="p-3">High-dimensional numerical vector representation of text meaning.</td></tr>
+                                <tr><td class="p-3 font-bold text-slate-200 font-mono">Vector Search</td><td class="p-3">Similarity search using embedding distances across a vector index.</td></tr>
+                                <tr><td class="p-3 font-bold text-slate-200 font-mono">Semantic Search</td><td class="p-3">Query resolution based on contextual meaning rather than exact string values.</td></tr>
+                                <tr><td class="p-3 font-bold text-slate-200 font-mono">TMDB</td><td class="p-3">The Movie Database — primary movie data source.</td></tr>
+                                <tr><td class="p-3 font-bold text-slate-200 font-mono">JWT</td><td class="p-3">JSON Web Token — used for stateless authentication.</td></tr>
+                                <tr><td class="p-3 font-bold text-slate-200 font-mono">API</td><td class="p-3">Application Programming Interface.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 2: OVERALL DESCRIPTION -->
+            <section id="sec-2" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-purple-500/10 text-purple-400 rounded-lg text-sm"><i class="fa-solid fa-cube"></i></span>
+                    <h2 class="text-2xl font-bold text-white">2. Overall Description</h2>
+                </div>
+                <p class="text-sm text-slate-400">MOVIX functions as an integrated multi-service environment. Compute-heavy operations (vector transformations) are isolated in a Python AI service from the fast client-facing Express API layer.</p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl col-span-2 sm:col-span-1">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-brands fa-react text-rose-400 mr-1.5"></i> Frontend</span>
+                        <ul class="text-slate-400 space-y-0.5 mt-2">
+                            <li>React.js</li><li>Tailwind CSS</li><li>Shadcn UI</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-brands fa-node-js text-rose-400 mr-1.5"></i> Backend</span>
+                        <ul class="text-slate-400 space-y-0.5 mt-2">
+                            <li>Node.js</li><li>Express.js</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-database text-rose-400 mr-1.5"></i> Database</span>
+                        <ul class="text-slate-400 space-y-0.5 mt-2">
+                            <li>MongoDB Atlas</li><li>Vector Search</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-brands fa-python text-rose-400 mr-1.5"></i> AI Service</span>
+                        <ul class="text-slate-400 space-y-0.5 mt-2">
+                            <li>Python / FastAPI</li><li>Sentence Transformers</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-sm font-bold text-slate-300 mt-4">User Classes</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-users text-rose-400 mr-1.5"></i> Guest</span>
+                        <p class="text-slate-400 mt-1">Browse and search movies publicly without an account.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-user-check text-rose-400 mr-1.5"></i> Registered User</span>
+                        <p class="text-slate-400 mt-1">Full access: watchlists, search history, personalized recommendations, and profile management.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-user-shield text-rose-400 mr-1.5"></i> Administrator</span>
+                        <p class="text-slate-400 mt-1">Privileged access to manage the movie database, analytics, and user accounts.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 3: SYSTEM FEATURES -->
+            <section id="sec-3" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-blue-500/10 text-blue-400 rounded-lg text-sm"><i class="fa-solid fa-star"></i></span>
+                    <h2 class="text-2xl font-bold text-white">3. System Features</h2>
+                </div>
+                <div class="space-y-3 text-xs">
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-mono text-[11px] text-rose-400 font-bold">FEATURE 01 — User Authentication</span>
+                        <p class="text-slate-400 mt-1">Registration, login, and logout protected by JWT-based stateless session tokens. Passwords hashed with bcrypt before storage.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-mono text-[11px] text-rose-400 font-bold">FEATURE 02 — Semantic Movie Search</span>
+                        <p class="text-slate-400 mt-1">Accepts freeform natural language prompts and computes vector distances against the movie embedding index to match abstract narrative concepts.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-mono text-[11px] text-rose-400 font-bold">FEATURE 03 — Movie Details</span>
+                        <p class="text-slate-400 mt-1">Displays title, overview, poster, cast, director, genres, runtime, release date, and ratings for any selected movie.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-mono text-[11px] text-rose-400 font-bold">FEATURE 04 — Watchlist Management</span>
+                        <p class="text-slate-400 mt-1">Fast async writes to append or remove movie records from a user's personal watchlist collection via atomic transactional requests.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-mono text-[11px] text-rose-400 font-bold">FEATURE 05 — AI Recommendations</span>
+                        <p class="text-slate-400 mt-1">Generates similar movie suggestions and personalized recommendations based on viewing history and semantic similarity scores.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-mono text-[11px] text-rose-400 font-bold">FEATURE 06 — Search History Tracking</span>
+                        <p class="text-slate-400 mt-1">Persists user search queries to MongoDB for history review and to power downstream personalization algorithms.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 4: EXTERNAL INTERFACES -->
+            <section id="sec-4" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-teal-500/10 text-teal-400 rounded-lg text-sm"><i class="fa-solid fa-circle-nodes"></i></span>
+                    <h2 class="text-2xl font-bold text-white">4. External Interface Requirements</h2>
+                </div>
+                <h3 class="text-sm font-bold text-slate-300">UI Pages</h3>
+                <div class="overflow-x-auto border border-slate-900 rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900 text-slate-300 font-mono">
+                            <tr><th class="p-3">Page</th><th class="p-3">Key Components</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-900 text-slate-400 bg-slate-950/20">
+                            <tr><td class="p-3 font-bold text-slate-200">Home</td><td class="p-3">Navbar, Hero Search, Trending Movies, Top Rated, Recommendations, Footer</td></tr>
+                            <tr><td class="p-3 font-bold text-slate-200">Search</td><td class="p-3">Search Input, Filters, Results Grid, Pagination</td></tr>
+                            <tr><td class="p-3 font-bold text-slate-200">Movie Details</td><td class="p-3">Movie Banner, Information Panel, Cast Section, Similar Movies, Watchlist Button</td></tr>
+                            <tr><td class="p-3 font-bold text-slate-200">Profile</td><td class="p-3">User Information, Search History, Watchlist Statistics</td></tr>
+                            <tr><td class="p-3 font-bold text-slate-200">Watchlist</td><td class="p-3">Saved movie grid with add / remove controls</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 class="text-sm font-bold text-slate-300 mt-4">Software Interfaces</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-center">
+                        <i class="fa-solid fa-leaf text-emerald-400 mb-1 block text-base"></i>
+                        <div class="font-bold text-slate-200">MongoDB Atlas</div>
+                        <span class="text-slate-500">Users, Movies, History</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-center">
+                        <i class="fa-solid fa-cloud text-blue-400 mb-1 block text-base"></i>
+                        <div class="font-bold text-slate-200">Cloudinary</div>
+                        <span class="text-slate-500">Profile Images</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-center">
+                        <i class="fa-brands fa-python text-yellow-400 mb-1 block text-base"></i>
+                        <div class="font-bold text-slate-200">AI Service</div>
+                        <span class="text-slate-500">Embeddings & Recs</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-center">
+                        <i class="fa-solid fa-film text-rose-400 mb-1 block text-base"></i>
+                        <div class="font-bold text-slate-200">TMDB</div>
+                        <span class="text-slate-500">Movie Dataset</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 5: ARCHITECTURE -->
+            <section id="sec-5" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-purple-500/10 text-purple-400 rounded-lg text-sm"><i class="fa-solid fa-sitemap"></i></span>
+                    <h2 class="text-2xl font-bold text-white">5. System Architecture</h2>
+                </div>
+                <div class="bg-slate-900/30 p-6 rounded-xl border border-slate-900 flex justify-center">
+                    <img src="https://res.cloudinary.com/dzwo6cuw4/image/upload/v1782373124/MOVIX_vgdauu.png" alt="MOVIX System Architecture Diagram" class="max-w-full h-auto rounded shadow-xl">
+                </div>
+            </section>
+
+            <!-- SEC 6: FUNCTIONAL REQUIREMENTS -->
+            <section id="sec-6" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-teal-500/10 text-teal-400 rounded-lg text-sm"><i class="fa-solid fa-list-check"></i></span>
+                    <h2 class="text-2xl font-bold text-white">6. Functional Requirements Matrix</h2>
+                </div>
+                <div class="overflow-x-auto border border-slate-900 rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900 text-slate-300 font-mono">
+                            <tr><th class="p-3">ID</th><th class="p-3">Requirement</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-900 text-slate-400 bg-slate-950/20">
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-01</td><td class="p-3">The system shall allow users to create accounts via email and password registration.</td></tr>
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-02</td><td class="p-3">The system shall authenticate users and issue JWT tokens upon successful login.</td></tr>
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-03</td><td class="p-3">The system shall allow natural language movie searches resolved via semantic vector embeddings.</td></tr>
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-04</td><td class="p-3">The system shall display browsable movie collections including trending and top-rated.</td></tr>
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-05</td><td class="p-3">The system shall display detailed information for any selected movie.</td></tr>
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-06</td><td class="p-3">The system shall allow authenticated users to add and remove movies from their watchlist.</td></tr>
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-07</td><td class="p-3">The system shall generate similar movie recommendations using vector similarity.</td></tr>
+                            <tr><td class="p-3 text-rose-400 font-bold font-mono">FR-08</td><td class="p-3">The system shall store and display search history for authenticated users.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SEC 7: NON-FUNCTIONAL -->
+            <section id="sec-7" class="scroll-mt-24">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-6">
+                    <span class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg text-sm"><i class="fa-solid fa-shield-halved"></i></span>
+                    <h2 class="text-2xl font-bold text-white">7. Non-Functional Performance Thresholds</h2>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center mb-6">
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="text-xl font-bold text-white font-mono">&lt; 2.0s</div>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500 mt-1 block">Search Latency</span>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="text-xl font-bold text-white font-mono">99.0%</div>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500 mt-1 block">Target Uptime</span>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="text-xl font-bold text-white font-mono">10k+</div>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500 mt-1 block">Concurrent Users</span>
+                    </div>
+                    <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="text-xl font-bold text-white font-mono">384 Dim</div>
+                        <span class="text-[10px] uppercase font-bold tracking-wider text-slate-500 mt-1 block">Embedding Size</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-bolt text-rose-400 mr-1.5"></i> Performance</span>
+                        <p class="text-slate-400">Semantic search responses delivered in under 2 seconds end-to-end including embedding generation and vector retrieval.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-expand text-rose-400 mr-1.5"></i> Scalability</span>
+                        <p class="text-slate-400">Architecture supports 10,000+ concurrent users and a catalog of 100,000+ movies in the vector index.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-code-branch text-rose-400 mr-1.5"></i> Maintainability</span>
+                        <p class="text-slate-400">Layered, modular architecture with clear separation between controller, service, and model responsibilities.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-slate-200 block mb-1"><i class="fa-solid fa-server text-rose-400 mr-1.5"></i> Availability</span>
+                        <p class="text-slate-400">99% uptime SLA targeting cloud-deployed services with automated health monitoring.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 8: DATABASE -->
+            <section id="sec-8" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-yellow-500/10 text-yellow-400 rounded-lg text-sm"><i class="fa-solid fa-database"></i></span>
+                    <h2 class="text-2xl font-bold text-white">8. Database Design</h2>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 font-mono text-xs text-slate-300">
+                    <span class="text-slate-500 block mb-2">// Collection: Users</span>
+                    <pre class="text-emerald-400 overflow-x-auto leading-relaxed">{
+  "_id":        "ObjectId",
+  "name":       "String",
+  "email":      "String",
+  "password":   "String (bcrypt hashed)",
+  "avatar":     "String",
+  "role":       "String",
+  "watchlist":  ["ObjectId"],
+  "createdAt":  "Date",
+  "updatedAt":  "Date"
+}</pre>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 font-mono text-xs text-slate-300">
+                    <span class="text-slate-500 block mb-2">// Collection: Movies</span>
+                    <pre class="text-emerald-400 overflow-x-auto leading-relaxed">{
+  "_id":          "ObjectId",
+  "tmdbId":       "Number",
+  "title":        "String",
+  "overview":     "String",
+  "genres":       ["String"],
+  "cast":         ["String"],
+  "director":     "String",
+  "posterPath":   "String",
+  "backdropPath": "String",
+  "releaseDate":  "Date",
+  "runtime":      "Number",
+  "voteAverage":  "Number",
+  <span class="text-rose-400 font-bold">"embedding":    [Number]  // 384-dimensional vector</span>
+}</pre>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 font-mono text-xs text-slate-300">
+                    <span class="text-slate-500 block mb-2">// Collection: SearchHistory</span>
+                    <pre class="text-emerald-400 overflow-x-auto leading-relaxed">{
+  "_id":       "ObjectId",
+  "userId":    "ObjectId",
+  "query":     "String",
+  "createdAt": "Date"
+}</pre>
+                </div>
+            </section>
+
+            <!-- SEC 9: COMPONENT FRAMEWORK -->
+            <section id="sec-9" class="scroll-mt-24">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-6">
+                    <span class="p-2 bg-teal-500/10 text-teal-400 rounded-lg text-sm"><i class="fa-solid fa-folder-tree"></i></span>
+                    <h2 class="text-2xl font-bold text-white">9. Component Framework</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
+                    <div class="p-4 bg-slate-900/50 border border-slate-800 rounded-xl">
+                        <span class="text-rose-400 block font-bold mb-3"><i class="fa-brands fa-react mr-1"></i> client/src/</span>
+                        <ul class="text-slate-400 pl-2 border-l border-slate-800 space-y-1.5">
+                            <li>├── <span class="text-slate-200">api/</span> <span class="text-slate-600 font-sans text-[11px]">HTTP config & interceptors</span></li>
+                            <li>├── <span class="text-slate-200">assets/</span></li>
+                            <li>├── <span class="text-slate-200">components/</span> <span class="text-slate-600 font-sans text-[11px]">Reusable UI primitives</span></li>
+                            <li>├── <span class="text-slate-200">hooks/</span> <span class="text-slate-600 font-sans text-[11px]">Custom React hooks</span></li>
+                            <li>├── <span class="text-slate-200">layouts/</span></li>
+                            <li>├── <span class="text-slate-200">pages/</span> <span class="text-slate-600 font-sans text-[11px]">Route-level components</span></li>
+                            <li>├── <span class="text-slate-200">routes/</span></li>
+                            <li>├── <span class="text-slate-200">store/</span> <span class="text-slate-600 font-sans text-[11px]">Global state</span></li>
+                            <li>├── <span class="text-slate-200">utils/</span></li>
+                            <li>└── <span class="text-slate-200">lib/</span></li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-slate-900/50 border border-slate-800 rounded-xl">
+                        <span class="text-emerald-400 block font-bold mb-3"><i class="fa-brands fa-node-js mr-1"></i> server/src/</span>
+                        <ul class="text-slate-400 pl-2 border-l border-slate-800 space-y-1.5">
+                            <li>├── <span class="text-slate-200">config/</span> <span class="text-slate-600 font-sans text-[11px]">Core initialization</span></li>
+                            <li>├── <span class="text-slate-200">controllers/</span> <span class="text-slate-600 font-sans text-[11px]">Request / Response</span></li>
+                            <li>├── <span class="text-slate-200">services/</span> <span class="text-slate-600 font-sans text-[11px]">Business logic</span></li>
+                            <li>├── <span class="text-slate-200">models/</span> <span class="text-slate-600 font-sans text-[11px]">DB schemas</span></li>
+                            <li>├── <span class="text-slate-200">routes/</span></li>
+                            <li>├── <span class="text-slate-200">middlewares/</span></li>
+                            <li>├── <span class="text-slate-200">validators/</span></li>
+                            <li>├── <span class="text-slate-200">utils/</span></li>
+                            <li>└── <span class="text-slate-200">jobs/</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 10: AI ENGINE -->
+            <section id="sec-10" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-pink-500/10 text-pink-400 rounded-lg text-sm"><i class="fa-solid fa-brain"></i></span>
+                    <h2 class="text-2xl font-bold text-white">10. AI & Vector Search Engine</h2>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-center mb-4">
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="font-bold text-slate-200 mb-1">Dataset</div>
+                        <span class="text-slate-400">TMDB</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="font-bold text-slate-200 mb-1">Model</div>
+                        <span class="text-slate-400 font-mono">all-MiniLM-L6-v2</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="font-bold text-slate-200 mb-1">Dimensions</div>
+                        <span class="text-rose-400 font-mono font-bold">384</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <div class="font-bold text-slate-200 mb-1">Metric</div>
+                        <span class="text-slate-400">Cosine Similarity</span>
+                    </div>
+                </div>
+                <p class="text-sm text-slate-400">The processing pipeline maps abstract user prompt text to movie data nodes using multi-dimensional vector alignment.</p>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center text-[10px] tracking-wide uppercase font-mono mt-4">
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                        <i class="fa-solid fa-keyboard text-rose-400 text-sm mb-1 block"></i> User Prompt
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                        <i class="fa-solid fa-calculator text-rose-400 text-sm mb-1 block"></i> 384-Dim Embedding
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                        <i class="fa-solid fa-magnifying-glass-chart text-rose-400 text-sm mb-1 block"></i> Atlas Index Search
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                        <i class="fa-solid fa-arrow-down-1-9 text-rose-400 text-sm mb-1 block"></i> Cosine Ranking
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-rose-500/30 rounded-lg bg-rose-950/10">
+                        <i class="fa-solid fa-film text-emerald-400 text-sm mb-1 block"></i> Top Matches
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 11: API -->
+            <section id="sec-11" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-orange-500/10 text-orange-400 rounded-lg text-sm"><i class="fa-solid fa-code"></i></span>
+                    <h2 class="text-2xl font-bold text-white">11. REST API Specifications</h2>
+                </div>
+                <div class="overflow-x-auto border border-slate-900 rounded-xl text-xs">
+                    <div class="grid grid-cols-12 bg-slate-900 p-3 font-mono font-bold text-slate-300 border-b border-slate-800">
+                        <div class="col-span-2">Method</div>
+                        <div class="col-span-4">Endpoint</div>
+                        <div class="col-span-6">Description</div>
+                    </div>
+                    <div class="divide-y divide-slate-900 font-mono">
+                        <div class="grid grid-cols-12 p-3 items-center bg-slate-950/20">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded font-bold">POST</span></div>
+                            <div class="col-span-4 text-slate-200">/api/auth/register</div>
+                            <div class="col-span-6 text-slate-400 font-sans">Create user account; bcrypt hash on password.</div>
+                        </div>
+                        <div class="grid grid-cols-12 p-3 items-center">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded font-bold">POST</span></div>
+                            <div class="col-span-4 text-slate-200">/api/auth/login</div>
+                            <div class="col-span-6 text-slate-400 font-sans">Validate credentials; issue JWT token.</div>
+                        </div>
+                        <div class="grid grid-cols-12 p-3 items-center bg-slate-950/20">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded font-bold">GET</span></div>
+                            <div class="col-span-4 text-slate-200">/api/movies</div>
+                            <div class="col-span-6 text-slate-400 font-sans">Fetch paginated movie list.</div>
+                        </div>
+                        <div class="grid grid-cols-12 p-3 items-center">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded font-bold">GET</span></div>
+                            <div class="col-span-4 text-slate-200">/api/movies/:id</div>
+                            <div class="col-span-6 text-slate-400 font-sans">Get a single movie by ID.</div>
+                        </div>
+                        <div class="grid grid-cols-12 p-3 items-center bg-slate-950/20">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-rose-500/10 text-rose-400 rounded font-bold">POST</span></div>
+                            <div class="col-span-4 text-rose-300 font-bold">/api/search</div>
+                            <div class="col-span-6 text-slate-300 font-sans">Semantic search — body: <span class="font-mono">{"query":"..."}</span></div>
+                        </div>
+                        <div class="grid grid-cols-12 p-3 items-center">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded font-bold">GET</span></div>
+                            <div class="col-span-4 text-slate-200">/api/watchlist</div>
+                            <div class="col-span-6 text-slate-400 font-sans">Get authenticated user's watchlist.</div>
+                        </div>
+                        <div class="grid grid-cols-12 p-3 items-center bg-slate-950/20">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded font-bold">POST</span></div>
+                            <div class="col-span-4 text-slate-200">/api/watchlist</div>
+                            <div class="col-span-6 text-slate-400 font-sans">Add a movie to watchlist.</div>
+                        </div>
+                        <div class="grid grid-cols-12 p-3 items-center">
+                            <div class="col-span-2"><span class="px-2 py-0.5 bg-red-500/10 text-red-400 rounded font-bold">DELETE</span></div>
+                            <div class="col-span-4 text-slate-200">/api/watchlist/:id</div>
+                            <div class="col-span-6 text-slate-400 font-sans">Remove a movie from watchlist.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 12: SECURITY -->
+            <section id="sec-12" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg text-sm"><i class="fa-solid fa-lock"></i></span>
+                    <h2 class="text-2xl font-bold text-white">12. Security Requirements</h2>
+                </div>
+                <div class="overflow-x-auto border border-slate-900 rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900 text-slate-300 font-mono">
+                            <tr><th class="p-3">ID</th><th class="p-3">Requirement</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-900 text-slate-400 bg-slate-950/20">
+                            <tr><td class="p-3 text-emerald-400 font-bold font-mono">SEC-01</td><td class="p-3">JWT-based stateless authentication enforced on all protected routes.</td></tr>
+                            <tr><td class="p-3 text-emerald-400 font-bold font-mono">SEC-02</td><td class="p-3">Passwords hashed using bcrypt before storage — never stored in plaintext.</td></tr>
+                            <tr><td class="p-3 text-emerald-400 font-bold font-mono">SEC-03</td><td class="p-3">All incoming data validated and sanitized before processing or persistence.</td></tr>
+                            <tr><td class="p-3 text-emerald-400 font-bold font-mono">SEC-04</td><td class="p-3">Rate limiting applied to all API endpoints to prevent abuse and brute-force attacks.</td></tr>
+                            <tr><td class="p-3 text-emerald-400 font-bold font-mono">SEC-05</td><td class="p-3">CORS configured to permit only trusted, allowlisted origins.</td></tr>
+                            <tr><td class="p-3 text-emerald-400 font-bold font-mono">SEC-06</td><td class="p-3">All credentials and secrets stored as environment variables — never committed to source control.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SEC 13: DEPLOYMENT -->
+            <section id="sec-13" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-sky-500/10 text-sky-400 rounded-lg text-sm"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                    <h2 class="text-2xl font-bold text-white">13. Deployment Architecture</h2>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs font-mono text-center">
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <i class="fa-solid fa-triangle-exclamation text-black text-base mb-1 block" style="color:#000;filter:invert(1)"></i>
+                        <div class="text-white font-bold mb-1">Vercel</div>
+                        <span class="text-slate-500 font-sans text-[11px]">Frontend</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <i class="fa-solid fa-server text-rose-400 text-base mb-1 block"></i>
+                        <div class="text-white font-bold mb-1">Railway</div>
+                        <span class="text-slate-500 font-sans text-[11px]">Express API</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <i class="fa-solid fa-server text-orange-400 text-base mb-1 block"></i>
+                        <div class="text-white font-bold mb-1">Render</div>
+                        <span class="text-slate-500 font-sans text-[11px]">AI Service (FastAPI)</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <i class="fa-solid fa-leaf text-emerald-400 text-base mb-1 block"></i>
+                        <div class="text-white font-bold mb-1">Atlas Cloud</div>
+                        <span class="text-slate-500 font-sans text-[11px]">Vector Database</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl">
+                        <i class="fa-solid fa-cloud text-blue-400 text-base mb-1 block"></i>
+                        <div class="text-white font-bold mb-1">Cloudinary</div>
+                        <span class="text-slate-500 font-sans text-[11px]">Media Storage</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 14: FUTURE ENHANCEMENTS -->
+            <section id="sec-14" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-violet-500/10 text-violet-400 rounded-lg text-sm"><i class="fa-solid fa-rocket"></i></span>
+                    <h2 class="text-2xl font-bold text-white">14. Future Enhancements</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-violet-300 block mb-1"><i class="fa-solid fa-filter mr-1.5"></i> Hybrid Search</span>
+                        <p class="text-slate-400 mt-1">Combine vector search with structured genre, year, and rating filters for compound queries.</p>
+                        <p class="text-slate-600 italic mt-2 font-mono text-[11px]">"Funny crime movies after 2020"</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-violet-300 block mb-1"><i class="fa-solid fa-comment-dots mr-1.5"></i> AI Explanations</span>
+                        <p class="text-slate-400 mt-1">Natural language reasoning for why each movie was recommended to the user.</p>
+                        <p class="text-slate-600 italic mt-2 font-mono text-[11px]">"Recommended because it blends emotional storytelling with space exploration."</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-violet-300 block mb-1"><i class="fa-solid fa-chart-line mr-1.5"></i> Analytics Dashboard</span>
+                        <p class="text-slate-400 mt-1">Track popular searches, user engagement patterns, and recommendation accuracy metrics.</p>
+                    </div>
+                    <div class="p-4 bg-slate-900/40 border border-slate-900 rounded-xl">
+                        <span class="font-bold text-violet-300 block mb-1"><i class="fa-solid fa-people-group mr-1.5"></i> Social Features</span>
+                        <p class="text-slate-400 mt-1">User reviews, star ratings, and shared watchlists to enable community-driven discovery.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEC 15: CONSTRAINTS -->
+            <section id="sec-15" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-3 border-b border-slate-900 pb-3 mb-2">
+                    <span class="p-2 bg-amber-500/10 text-amber-400 rounded-lg text-sm"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                    <h2 class="text-2xl font-bold text-white">15. Assumptions & Constraints</h2>
+                </div>
+                <h3 class="text-sm font-bold text-slate-300">Assumptions</h3>
+                <div class="space-y-2 text-xs">
+                    <div class="flex gap-3 p-3 bg-slate-900/40 border border-slate-900 rounded-lg">
+                        <span class="text-amber-400 font-mono font-bold shrink-0">ASS-01</span>
+                        <span class="text-slate-400">The TMDB dataset is available and contains sufficient movie metadata for quality embeddings.</span>
+                    </div>
+                    <div class="flex gap-3 p-3 bg-slate-900/40 border border-slate-900 rounded-lg">
+                        <span class="text-amber-400 font-mono font-bold shrink-0">ASS-02</span>
+                        <span class="text-slate-400">MongoDB Atlas's vector search index is available on the selected service tier.</span>
+                    </div>
+                    <div class="flex gap-3 p-3 bg-slate-900/40 border border-slate-900 rounded-lg">
+                        <span class="text-amber-400 font-mono font-bold shrink-0">ASS-03</span>
+                        <span class="text-slate-400">Internet connectivity is available for all users and all hosted services at runtime.</span>
+                    </div>
+                </div>
+                <h3 class="text-sm font-bold text-slate-300 mt-4">Constraints</h3>
+                <div class="space-y-2 text-xs">
+                    <div class="flex gap-3 p-3 bg-slate-900/40 border border-rose-900/30 rounded-lg">
+                        <span class="text-rose-400 font-mono font-bold shrink-0">CON-01</span>
+                        <span class="text-slate-400">Embedding generation requires an active Python service; the platform cannot function without it.</span>
+                    </div>
+                    <div class="flex gap-3 p-3 bg-slate-900/40 border border-rose-900/30 rounded-lg">
+                        <span class="text-rose-400 font-mono font-bold shrink-0">CON-02</span>
+                        <span class="text-slate-400">Search quality is directly dependent on the quality and coverage of the underlying dataset.</span>
+                    </div>
+                    <div class="flex gap-3 p-3 bg-slate-900/40 border border-rose-900/30 rounded-lg">
+                        <span class="text-rose-400 font-mono font-bold shrink-0">CON-03</span>
+                        <span class="text-slate-400">Free-tier hosting on Render or Railway may impose cold-start latency and resource constraints.</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer class="mt-24 border-t border-slate-900 bg-slate-950 py-8 text-center text-xs text-slate-500 font-mono">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <img src="https://res.cloudinary.com/dzwo6cuw4/image/upload/v1782373122/logo_xstim2.png" alt="MOVIX Logo" class="h-7 w-auto object-contain">
+            </div>
+            <p>Software Requirements Specification v1.0 · Prepared by Shahadat Ali · June 2026</p>
+        </div>
+    </footer>
+
+</body>
+</html>
