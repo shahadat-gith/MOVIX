@@ -25,12 +25,11 @@ const Footer = () => {
             <h3 className="text-sm font-semibold text-text uppercase tracking-wider">
               Quick Links
             </h3>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col mb-3 ">
               {[
                 { to: "/", label: "Home" },
                 { to: "/movies", label: "Browse Movies" },
                 { to: "/search", label: "AI Search" },
-                { to: "/auth?mode=login", label: "Sign In" },
               ].map((link) => (
                 <Link
                   key={link.to}
