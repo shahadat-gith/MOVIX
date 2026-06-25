@@ -4,6 +4,7 @@ import Movies from "../pages/Movies";
 import MovieDetails from "../pages/MovieDetails";
 import Search from "../pages/Search";
 import NotFound from "../pages/NotFound";
+import Recommendations from "../pages/Recommendations";
 
 const movieRoutes = {
   element: <MainLayout />,
@@ -12,6 +13,7 @@ const movieRoutes = {
     { path: "/movies", element: <Movies /> },
     { path: "/movie/:id", element: <MovieDetails /> },
     { path: "/search", element: <Search /> },
+    { path: "/recomended", element: <Recommendations /> },
     { path: "*", element: <NotFound /> },
   ],
 };
