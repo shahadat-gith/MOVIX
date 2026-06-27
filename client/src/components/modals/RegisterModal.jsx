@@ -183,7 +183,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
+                  placeholder="Enter your email"
                   icon={<FiMail className="w-4 h-4" />}
                   autoComplete="email"
                 />

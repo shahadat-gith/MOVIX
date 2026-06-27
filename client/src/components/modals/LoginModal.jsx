@@ -105,7 +105,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="Enter your email"
                 icon={<FiMail className="w-4 h-4" />}
                 autoComplete="email"
               />
@@ -144,7 +144,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
                   onClick={onSwitchToRegister}
                   className="text-primary-light hover:text-primary transition-colors font-medium"
                 >
-                  Create one
+                  Register 
                 </button>
               </p>
             </form>

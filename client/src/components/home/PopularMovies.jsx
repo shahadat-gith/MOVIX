@@ -31,7 +31,7 @@ const PopularMovies = () => {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
             {movies.slice(0, 12).map((movie, i) => (
-              <MovieCard key={movie.tmdbId} movie={movie} index={i} />
+              <MovieCard key={movie._id} movie={movie} index={i} />
             ))}
           </div>
         )}

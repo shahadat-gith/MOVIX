@@ -53,10 +53,10 @@ export const useMovies = (page = 1, limit = 20) =>
     [page, limit]
   );
 
-export const useMovieDetails = (tmdbId) =>
+export const useMovieDetails = (movieId) =>
   useFetch(
-    () => getMovieById(tmdbId),
-    [tmdbId]
+    () => getMovieById(movieId),
+    [movieId]
   );
 
 export const usePopularMovies = () =>

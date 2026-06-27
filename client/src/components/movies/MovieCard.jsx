@@ -2,9 +2,47 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { POSTER_BASE } from "../../constants/index";
 import { formatVoteAverage } from "../../utils/formatter";
-import { FiStar, FiClock } from "react-icons/fi";
+import { FiStar, FiClock, FiHeart } from "react-icons/fi";
+import useWatchlist from "../../hooks/useWatchlist";
+import useAuth from "../../hooks/useAuth";
 
-const MovieCard = ({ movie, index = 0 }) => {
+const WatchlistButton = ({ movieId }) => {
+  const { user } = useAuth();
+  const { inWatchlist, loading, toggleWatchlist } = useWatchlist(movieId);
+
+  if (!user) return null;
+
+  return (
+    <button
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleWatchlist();
+      }}
+      disabled={loading}
+      className={`
+        absolute bottom-2 right-2 z-10 p-2 rounded-lg backdrop-blur-sm
+        transition-all duration-200
+        ${inWatchlist
+          ? "bg-danger/90 text-white shadow-lg shadow-danger/30"
+          : "bg-black/60 text-white/80 hover:text-danger hover:bg-black/80 opacity-0 group-hover:opacity-100"
+        }
+        ${loading ? "opacity-50 cursor-not-allowed" : ""}
+      `}
+      title={inWatchlist ? "Remove from watchlist" : "Add to watchlist"}
+    >
+      {loading ? (
+        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      ) : (
+        <FiHeart
+          className={`w-4 h-4 transition-transform duration-200 ${inWatchlist ? "fill-current scale-110" : ""}`}
+        />
+      )}
+    </button>
+  );
+};
+
+const MovieCard = ({ movie, index = 0, showWatchlist = true }) => {
   const posterUrl = movie.posterPath
     ? `${POSTER_BASE}${movie.posterPath}`
     : null;
@@ -16,7 +54,7 @@ const MovieCard = ({ movie, index = 0 }) => {
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
       <Link
-        to={`/movie/${movie.tmdbId}`}
+        to={`/movie/${movie._id}`}
         className="group block relative"
       >
         {/* Card Container */}
@@ -55,6 +93,9 @@ const MovieCard = ({ movie, index = 0 }) => {
                 </span>
               </div>
             )}
+
+            {/* Watchlist Button */}
+            {showWatchlist && <WatchlistButton movieId={movie._id} />}
 
             {/* Hover Info Overlay */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">

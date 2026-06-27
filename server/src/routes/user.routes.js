@@ -3,7 +3,7 @@ import express from "express";
 import {
   getProfile,
   getRecommendations,
-  updateProfile,
+  updatePreferences,
   uploadAvatar,
 } from "../controllers/user.controller.js";
 
@@ -26,9 +26,9 @@ router.get(
 );
 
 router.put(
-  "/profile",
+  "/preferences",
   authenticate,
-  updateProfile
+  updatePreferences
 );
 
 router.post(

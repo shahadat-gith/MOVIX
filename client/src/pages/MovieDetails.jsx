@@ -1,11 +1,35 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiStar, FiClock, FiCalendar, FiArrowLeft } from "react-icons/fi";
+import { FiStar, FiClock, FiCalendar, FiArrowLeft, FiHeart } from "react-icons/fi";
 import { BACKDROP_BASE, POSTER_BASE } from "../constants";
 import { formatRuntime, formatVoteAverage } from "../utils/formatter";
 import { useMovieDetails } from "../hooks/useMovies";
+import useWatchlist from "../hooks/useWatchlist";
+import useAuth from "../hooks/useAuth";
 import Badge from "../components/common/Badge";
 import Glow from "../components/common/Glow";
+import Button from "../components/common/Button";
+
+const WatchlistAction = ({ movieId }) => {
+  const { user } = useAuth();
+  const { inWatchlist, loading, checking, toggleWatchlist } = useWatchlist(movieId);
+
+  if (!user) return null;
+  if (checking) return null;
+
+  return (
+    <Button
+      variant={inWatchlist ? "danger" : "primary"}
+      size="md"
+      icon={FiHeart}
+      loading={loading}
+      onClick={toggleWatchlist}
+      className="mb-6"
+    >
+      {inWatchlist ? "In Watchlist" : "Add to Watchlist"}
+    </Button>
+  );
+};
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -184,6 +208,9 @@ const MovieDetails = () => {
                 </div>
               )}
             </div>
+
+            {/* Watchlist Button */}
+            <WatchlistAction movieId={movie._id} />
 
             {/* Genres */}
             {movie.genres && movie.genres.length > 0 && (

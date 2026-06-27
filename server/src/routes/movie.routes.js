@@ -18,6 +18,6 @@ router.get("/latest", getLatestMovies);
 router.get("/genre/:genre", getMoviesByGenre);
 router.get("/search", searchMoviesByTitle)
 
-router.get("/:tmdbId", getMovieById);
+router.get("/:movieId", getMovieById);
 
 export default router;

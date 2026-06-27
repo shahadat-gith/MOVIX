@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 
-import aiRoutes from "./routes/ai.routes.js";
+import aiRoutes from "./routes/search.routes.js";
 import movieRoutes from "./routes/movie.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
@@ -28,7 +28,7 @@ app.use(
 );
 
 
-app.use("/api", apiLimiter);
+
 
 app.get("/", (req, res) => {
   return res.status(200).json({

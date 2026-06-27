@@ -1,150 +1,191 @@
+import mongoose from "mongoose";
 import User from "../models/User.js";
 import Movie from "../models/Movie.js";
-import enrichMovies from "../utils/enrichMovies.js";
 
 export const getWatchlist = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId).lean();
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
 
-    const tmdbIds = user.watchlist || [];
-
-    if (tmdbIds.length === 0) {
+    if (!user.watchlist?.length) {
       return res.status(200).json({
         success: true,
         movies: [],
-        count: 0,
+        count: 0
       });
     }
 
-    let movies = await Movie.find(
-      { tmdbId: { $in: tmdbIds } },
+    const movies = await Movie.find(
+      { _id: { $in: user.watchlist } },
       { embedding: 0 }
     ).lean();
-
-    movies = await enrichMovies(movies);
 
     return res.status(200).json({
       success: true,
       movies,
-      count: movies.length,
+      count: movies.length
     });
+
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch watchlist",
+      message: "Failed to fetch watchlist"
     });
   }
 };
 
 export const addToWatchlist = async (req, res) => {
   try {
-    const { tmdbId } = req.body;
+    const { movieId } = req.body;
 
-    if (!tmdbId) {
+    if (!movieId) {
       return res.status(400).json({
         success: false,
-        message: "tmdbId is required",
+        message: "movieId is required"
       });
     }
 
-    const user = await User.findById(req.userId);
+    if (!mongoose.Types.ObjectId.isValid(movieId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid movie ID"
+      });
+    }
+
+    const movie = await Movie.exists({ _id: movieId });
+
+    if (!movie) {
+      return res.status(404).json({
+        success: false,
+        message: "Movie not found"
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        $addToSet: {
+          watchlist: new mongoose.Types.ObjectId(movieId)
+        }
+      },
+      {
+        new: true
+      }
+    ).lean();
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
-
-    if (user.watchlist.includes(tmdbId)) {
-      return res.status(200).json({
-        success: true,
-        message: "Movie already in watchlist",
-        watchlist: user.watchlist,
-      });
-    }
-
-    user.watchlist.push(tmdbId);
-    await user.save();
 
     return res.status(200).json({
       success: true,
       message: "Added to watchlist",
-      watchlist: user.watchlist,
+      watchlist: user.watchlist
     });
+
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       success: false,
-      message: "Failed to add to watchlist",
+      message: "Failed to add to watchlist"
     });
   }
 };
 
 export const removeFromWatchlist = async (req, res) => {
   try {
-    const { tmdbId } = req.params;
+    const { movieId } = req.params;
 
-    const user = await User.findById(req.userId);
+    if (!mongoose.Types.ObjectId.isValid(movieId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid movie ID"
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      {
+        $pull: {
+          watchlist: new mongoose.Types.ObjectId(movieId)
+        }
+      },
+      {
+        new: true
+      }
+    ).lean();
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
-
-    user.watchlist = user.watchlist.filter(
-      (id) => id !== Number(tmdbId)
-    );
-    await user.save();
 
     return res.status(200).json({
       success: true,
       message: "Removed from watchlist",
-      watchlist: user.watchlist,
+      watchlist: user.watchlist
     });
+
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       success: false,
-      message: "Failed to remove from watchlist",
+      message: "Failed to remove from watchlist"
     });
   }
 };
 
 export const checkInWatchlist = async (req, res) => {
   try {
-    const { tmdbId } = req.params;
+    const { movieId } = req.params;
 
-    const user = await User.findById(req.userId);
+    if (!mongoose.Types.ObjectId.isValid(movieId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid movie ID"
+      });
+    }
+
+    const user = await User.findById(req.userId).lean();
 
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
 
-    const inWatchlist = user.watchlist.includes(Number(tmdbId));
+    const objId = new mongoose.Types.ObjectId(movieId);
+    const inWatchlist = user.watchlist?.some(
+      (id) => id.toString() === objId.toString()
+    ) || false;
 
     return res.status(200).json({
       success: true,
-      inWatchlist,
+      inWatchlist
     });
+
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       success: false,
-      message: "Failed to check watchlist",
+      message: "Failed to check watchlist"
     });
   }
 };

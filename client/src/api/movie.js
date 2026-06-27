@@ -8,9 +8,9 @@ export const getMovies = async (page = 1, limit = 20) => {
   return response.data;
 };
 
-export const getMovieById = async (tmdbId) => {
+export const getMovieById = async (movieId) => {
   const response = await api.get(
-    `/movies/${tmdbId}`
+    `/movies/${movieId}`
   );
 
   return response.data;

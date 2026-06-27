@@ -13,7 +13,7 @@ const App = () => {
     <AuthProvider>
       <MovieProvider>
         <Toaster
-          position="top-right"
+          position="top-center"
           toastOptions={{
             duration: 3000,
             style: {

@@ -4,7 +4,7 @@ import {
   getWatchlist,
   addToWatchlist,
   removeFromWatchlist,
-  checkInWatchlist,
+  checkInWatchlist
 } from "../controllers/watchlist.controller.js";
 
 import authenticate from "../middlewares/auth.middleware.js";
@@ -12,8 +12,11 @@ import authenticate from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.get("/", authenticate, getWatchlist);
+
 router.post("/", authenticate, addToWatchlist);
-router.delete("/:tmdbId", authenticate, removeFromWatchlist);
-router.get("/check/:tmdbId", authenticate, checkInWatchlist);
+
+router.delete("/:movieId", authenticate, removeFromWatchlist);
+
+router.get("/check/:movieId", authenticate, checkInWatchlist);
 
 export default router;

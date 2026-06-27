@@ -1,6 +1,7 @@
 import MainLayout from "../components/layout/MainLayout";
 import Watchlist from "../pages/Watchlist";
 import Recommendations from "../pages/Recommendations";
+import Settings from "../pages/Settings";
 
 const userRoutes = {
   element: <MainLayout />,
@@ -12,6 +13,10 @@ const userRoutes = {
     {
       path: "/recommended",
       element: <Recommendations />,
+    },
+    {
+      path: "/settings",
+      element: <Settings />,
     },
   ],
 };

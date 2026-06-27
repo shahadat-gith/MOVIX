@@ -5,18 +5,23 @@ export const getWatchlist = async () => {
   return response.data;
 };
 
-export const addToWatchlist = async (tmdbId) => {
-  const response = await api.post("/watchlist", { tmdbId });
+export const addToWatchlist = async (movieId) => {
+  const response = await api.post("/watchlist", { movieId });
   return response.data;
 };
 
-export const removeFromWatchlist = async (tmdbId) => {
-  const response = await api.delete(`/watchlist/${tmdbId}`);
+export const removeFromWatchlist = async (movieId) => {
+  const response = await api.delete(`/watchlist/${movieId}`);
   return response.data;
 };
 
-export const updateProfile = async (data) => {
-  const response = await api.put("/users/profile", data);
+export const checkInWatchlist = async (movieId) => {
+  const response = await api.get(`/watchlist/check/${movieId}`);
+  return response.data;
+};
+
+export const updatePreferences = async (data) => {
+  const response = await api.put("/users/preferences", data);
   return response.data;
 };
 

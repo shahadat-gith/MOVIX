@@ -52,9 +52,7 @@ const Movies = () => {
           <h1 className="text-3xl sm:text-4xl font-bold font-display text-text mb-2">
             Browse Movies
           </h1>
-          <p className="text-text-muted">
-            Explore our collection of movies
-          </p>
+          <p className="text-text-muted">Explore our collection of movies</p>
         </div>
 
         {/* Genre Filters */}
@@ -112,7 +110,7 @@ const Movies = () => {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
               {filteredMovies.map((movie, i) => (
-                <MovieCard key={movie.tmdbId} movie={movie} index={i} />
+                <MovieCard key={movie._id} movie={movie} index={i} />
               ))}
             </div>
 

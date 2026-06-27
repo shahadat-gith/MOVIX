@@ -69,7 +69,8 @@ const userSchema = new mongoose.Schema(
 
     watchlist: [
       {
-        type: Number, // tmdbId
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Movie",
       },
     ],
 
