@@ -2,32 +2,41 @@ import mongoose from "mongoose";
 
 const searchHistorySchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
     query: {
       type: String,
       required: true,
+      trim: true,
     },
+
     type: {
       type: String,
-      enum: ["ai", "name"],
-      default: "ai",
+      enum: ["ai", "title"],
+      required: true,
     },
-    results: [
-      {
-        tmdbId: Number,
-        title: String,
-      },
-    ],
+
+    count: {
+      type: Number,
+      default: 1,
+      min: 0,
+    },
+
+    lastSearchedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
-  }
+    versionKey: false,
+  },
 );
 
-searchHistorySchema.index({ user: 1, createdAt: -1 });
+searchHistorySchema.index({ lastSearchedAt: -1 });
+searchHistorySchema.index({ count: -1 });
+searchHistorySchema.index({ query: 1, type: 1 }, { unique: true });
 
-export default mongoose.model("SearchHistory", searchHistorySchema);
+const SearchHistory =
+  mongoose.models.SearchHistory ||
+  mongoose.model("SearchHistory", searchHistorySchema);
+
+export default SearchHistory;

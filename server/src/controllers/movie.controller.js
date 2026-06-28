@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import Movie from "../models/Movie.js";
+import { findSimilarMovies, saveSearchHistory } from "../services/search.js";
 
 export const getAllMovies = async (req, res) => {
   try {
@@ -7,11 +9,8 @@ export const getAllMovies = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const [movies, totalMovies] = await Promise.all([
-      Movie.find({}, { embedding: 0 })
-        .skip(skip)
-        .limit(limit)
-        .lean(),
-      Movie.countDocuments()
+      Movie.find({}, { embedding: 0 }).skip(skip).limit(limit).lean(),
+      Movie.countDocuments(),
     ]);
 
     return res.status(200).json({
@@ -19,15 +18,14 @@ export const getAllMovies = async (req, res) => {
       movies,
       totalMovies,
       currentPage: page,
-      totalPages: Math.ceil(totalMovies / limit)
+      totalPages: Math.ceil(totalMovies / limit),
     });
-
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch movies"
+      message: "Failed to fetch movies",
     });
   }
 };
@@ -36,29 +34,25 @@ export const getMovieById = async (req, res) => {
   try {
     const { movieId } = req.params;
 
-    const movie = await Movie.findById(
-      movieId,
-      { embedding: 0 }
-    ).lean();
+    const movie = await Movie.findById(movieId, { embedding: 0 }).lean();
 
     if (!movie) {
       return res.status(404).json({
         success: false,
-        message: "Movie not found"
+        message: "Movie not found",
       });
     }
 
     return res.status(200).json({
       success: true,
-      movie
+      movie,
     });
-
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch movie"
+      message: "Failed to fetch movie",
     });
   }
 };
@@ -72,15 +66,14 @@ export const getPopularMovies = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      movies
+      movies,
     });
-
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch popular movies"
+      message: "Failed to fetch popular movies",
     });
   }
 };
@@ -90,31 +83,30 @@ export const getTopRatedMovies = async (req, res) => {
     const movies = await Movie.find(
       {
         voteAverage: {
-          $gt: 0
-        }
+          $gt: 0,
+        },
       },
       {
-        embedding: 0
-      }
+        embedding: 0,
+      },
     )
       .sort({
         voteAverage: -1,
-        voteCount: -1
+        voteCount: -1,
       })
       .limit(20)
       .lean();
 
     return res.status(200).json({
       success: true,
-      movies
+      movies,
     });
-
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch top rated movies"
+      message: "Failed to fetch top rated movies",
     });
   }
 };
@@ -128,15 +120,14 @@ export const getLatestMovies = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      movies
+      movies,
     });
-
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch latest movies"
+      message: "Failed to fetch latest movies",
     });
   }
 };
@@ -149,27 +140,26 @@ export const getMoviesByGenre = async (req, res) => {
       {
         genres: {
           $regex: genre,
-          $options: "i"
-        }
+          $options: "i",
+        },
       },
       {
-        embedding: 0
-      }
+        embedding: 0,
+      },
     )
       .limit(20)
       .lean();
 
     return res.status(200).json({
       success: true,
-      movies
+      movies,
     });
-
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch movies"
+      message: "Failed to fetch movies",
     });
   }
 };
@@ -182,17 +172,31 @@ export const searchMoviesByTitle = async (req, res) => {
       return res.status(200).json({
         success: true,
         movies: [],
-        count: 0
+        count: 0,
       });
     }
 
+    const query = q.trim();
+
+    if (req.userId) {
+      saveSearchHistory({
+        user: req.userId,
+        query,
+        type: "title",
+      }).catch(console.error);
+    }
+
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    const regex = new RegExp(`\\b${escapedQuery}\\b`, "i");
+
     const movies = await Movie.find(
       {
-        title: new RegExp(q.trim(), "i")
+        title: regex,
       },
       {
-        embedding: 0
-      }
+        embedding: 0,
+      },
     )
       .sort({ popularity: -1 })
       .limit(20)
@@ -201,15 +205,40 @@ export const searchMoviesByTitle = async (req, res) => {
     return res.status(200).json({
       success: true,
       movies,
-      count: movies.length
+      count: movies.length,
     });
-
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
       success: false,
-      message: "Failed to search movies"
+      message: "Failed to search movies",
+    });
+  }
+};
+export const getSimilarMovies = async (req, res) => {
+  try {
+    const { id } = req.query;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid movie id",
+      });
+    }
+
+    const movies = await findSimilarMovies(id);
+
+    return res.status(200).json({
+      success: true,
+      movies,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch similar movies",
     });
   }
 };

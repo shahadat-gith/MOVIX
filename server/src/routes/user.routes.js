@@ -12,30 +12,9 @@ import upload from "../middlewares/upload.middleware.js";
 
 const router = express.Router();
 
-router.get(
-  "/profile",
-  authenticate,
-  getProfile
-);
-
-
-router.get(
-  "/recommendations",
-  authenticate,
-  getRecommendations
-);
-
-router.put(
-  "/preferences",
-  authenticate,
-  updatePreferences
-);
-
-router.post(
-  "/avatar",
-  authenticate,
-  upload.single("avatar"),
-  uploadAvatar
-);
+router.get("/profile", authenticate, getProfile);
+router.get("/recommendations", authenticate, getRecommendations);
+router.put("/preferences", authenticate, updatePreferences);
+router.post("/avatar", authenticate, upload.single("avatar"), uploadAvatar);
 
 export default router;

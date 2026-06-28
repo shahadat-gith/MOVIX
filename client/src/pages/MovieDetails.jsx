@@ -1,6 +1,12 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiStar, FiClock, FiCalendar, FiArrowLeft, FiHeart } from "react-icons/fi";
+import {
+  FiStar,
+  FiClock,
+  FiCalendar,
+  FiArrowLeft,
+  FiHeart,
+} from "react-icons/fi";
 import { BACKDROP_BASE, POSTER_BASE } from "../constants";
 import { formatRuntime, formatVoteAverage } from "../utils/formatter";
 import { useMovieDetails } from "../hooks/useMovies";
@@ -9,10 +15,12 @@ import useAuth from "../hooks/useAuth";
 import Badge from "../components/common/Badge";
 import Glow from "../components/common/Glow";
 import Button from "../components/common/Button";
+import SimilarMovies from "../components/movies/SimilarMovies";
 
 const WatchlistAction = ({ movieId }) => {
   const { user } = useAuth();
-  const { inWatchlist, loading, checking, toggleWatchlist } = useWatchlist(movieId);
+  const { inWatchlist, loading, checking, toggleWatchlist } =
+    useWatchlist(movieId);
 
   if (!user) return null;
   if (checking) return null;
@@ -197,7 +205,9 @@ const MovieDetails = () => {
               {movie.runtime && (
                 <div className="flex items-center gap-1.5 text-text-muted">
                   <FiClock className="w-4 h-4" />
-                  <span className="text-sm">{formatRuntime(movie.runtime)}</span>
+                  <span className="text-sm">
+                    {formatRuntime(movie.runtime)}
+                  </span>
                 </div>
               )}
 
@@ -291,6 +301,10 @@ const MovieDetails = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Similar Movies */}
+
+      <SimilarMovies movieId={movie._id || movie.id} />
     </motion.div>
   );
 };

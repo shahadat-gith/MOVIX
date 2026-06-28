@@ -34,3 +34,6 @@ export const getRecommendations = async () => {
   const response = await api.get("/users/recommendations");
   return response.data;
 };
+
+
+

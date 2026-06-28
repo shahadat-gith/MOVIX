@@ -48,12 +48,40 @@ export const getMoviesByGenre = async (genre) => {
   return response.data;
 };
 
-export const searchMovies = async (query) => {
+export const aiSearch = async (query) => {
   const response = await api.post("/ai/search", { query });
   return response.data;
 };
 
 export const searchMoviesByTitle = async (query) => {
   const response = await api.get(`/movies/search?q=${encodeURIComponent(query)}`);
+  return response.data;
+};
+
+
+
+export const fetchSimilarMovies = async(movieId) =>{
+  const response = await api.get(`/movies/similar?id=${movieId}`);
+
+  return response.data
+}
+
+export const getSearchHistory = async (limit = 15) => {
+  const response = await api.get(`/ai/history?limit=${limit}`);
+  return response.data;
+};
+
+export const getTrendingSearches = async (limit = 10) => {
+  const response = await api.get(`/ai/trending?limit=${limit}`);
+  return response.data;
+};
+
+export const deleteSearchHistoryItem = async (id) => {
+  const response = await api.delete(`/ai/history/${id}`);
+  return response.data;
+};
+
+export const clearAllSearchHistory = async () => {
+  const response = await api.delete("/ai/history");
   return response.data;
 };

@@ -73,17 +73,6 @@ const userSchema = new mongoose.Schema(
         ref: "Movie",
       },
     ],
-
-    searchHistory: [
-      {
-        query: String,
-
-        searchedAt: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
   },{timestamps: true,});
 
 export default mongoose.model("User", userSchema);
